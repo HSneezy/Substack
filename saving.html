@@ -21,17 +21,38 @@
     <main>
         <section id="carrot-collection">
             <h2>Here are the items I'm saving for:</h2>
-
-            <!-- Embed your Carrot collection -->
-            <iframe src="https://carrot.link/sneezych/wants" width="100%" height="600" frameborder="0" style="border: none;"></iframe>
-            
-            <!-- Alternatively, you can provide a link if you don't want an iframe -->
-            <!-- <p>Check out my saved items <a href="https://your-carrot-link-url.com" target="_blank">here on Carrot!</a></p> -->
+            <div id="collection-items"></div>
         </section>
     </main>
 
     <footer>
         <p>&copy; 2024 Thoughts About Clothes. All rights reserved.</p>
     </footer>
+
+    <script>
+      // Fetch the collection data and render it
+      async function loadCollection() {
+        try {
+          const response = await fetch('/api/collection');
+          const items = await response.json();
+          const collectionContainer = document.getElementById('collection-items');
+
+          items.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.classList.add('collection-item');
+            itemDiv.innerHTML = `
+              <h3>${item.title}</h3>
+              <p><a href="${item.link}" target="_blank">View Item</a></p>
+            `;
+            collectionContainer.appendChild(itemDiv);
+          });
+        } catch (error) {
+          console.error('Error loading collection:', error);
+        }
+      }
+
+      // Call the function to load collection items on page load
+      loadCollection();
+    </script>
 </body>
 </html>
